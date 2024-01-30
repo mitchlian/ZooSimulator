@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+public class Enclosure {
+    private String name;
+    private double area;
+    private ArrayList<Animal> animals;
+
+    public Enclosure (String name, double area, ArrayList<Animal> animals ) {
+        this.name = name;
+        this.area = area;
+        this.animals = animals;
+    }
+
+    public double countAnimals() {
+        return 0;
+    }
+    public double getUtilisedArea() {
+        return 0;
+    }
+    public double getUtilisedAreaPercentage() {
+        return 0;
+    }
+    public double countSpecies(String type) {
+        return 0;
+    }
+    public boolean addAnimal(Animal animal) {
+        return false;
+    }
+    public double createNewEnclosure() {
+        return 0;
+    }
+}
