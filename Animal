@@ -1,0 +1,25 @@
+public class Animal {
+    private String species;
+    private Enclosure enclosure;
+    private double areaNeeded;
+
+    //Constructor
+    public Animal (String species, Enclosure enclosure, double areaNeeded) {
+
+    }
+
+    //Method Descriptors
+    public boolean hasCompanion() {
+        return false;
+    }
+
+    //Getter and Setter for enclosure
+    public Enclosure getEnclosure() {
+        return null;
+    }
+
+    public void setEnclosure(Enclosure enclosure) {
+
+    }
+
+}
