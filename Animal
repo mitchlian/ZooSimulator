@@ -3,9 +3,12 @@ public class Animal {
     private Enclosure enclosure;
     private double areaNeeded;
 
+
     //Constructor
     public Animal (String species, Enclosure enclosure, double areaNeeded) {
-
+    this.species = species;
+    this.enclosure = enclosure;
+    this.areaNeeded = areaNeeded;
     }
 
     //Method Descriptors
