@@ -5,7 +5,8 @@ public class Zoo {
     private ArrayList<Enclosure> enclosures;
 
     public Zoo (String name, String description) {
-
+        this.name = name;
+        this.description = description;
     }
 
     public double getTotalEnclosureArea() {
