@@ -1,17 +1,20 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
-
 public class ZooManagement {
     private static Scanner input = new Scanner(System.in);
-    private static ArrayList<Zoo> zoos = new ArrayList<>();
+    private static ArrayList < Zoo > zoos = new ArrayList <> ();
+    private static ArrayList < Enclosure > enclosures = new ArrayList <> ();
+    private static ArrayList< Animal > animals = new ArrayList<>();
+
+
     public static void main(String[] args) {
 
         System.out.println("Welcome to the zoo program!");
         System.out.println("===========================");
 
         //While(true) allows ur program to run forever
-        while(true) {
+        while (true) {
             //Prompt user input
             System.out.println();
             System.out.println("1. Manage Animals");
@@ -25,10 +28,10 @@ public class ZooManagement {
 
             // Check all the options.
             // Trim get rids of all the spaces
-            //Use switch and case for error handling
-            //Whenever I collect options i always use string because its a lot easier to manage strings and can accept alphanumerical things
-            //toUpperCase converts lower case to upper
-            switch(option.trim().toUpperCase()) {
+            // Use switch and case for error handling
+            // Whenever I collect options i always use string because its a lot easier to manage strings and can accept alphanumerical things
+            // toUpperCase converts lower case to upper
+            switch (option.trim().toUpperCase()) {
                 case "1":
                     manageAnimals();
                     break;
@@ -44,31 +47,75 @@ public class ZooManagement {
                     System.out.println();
                     System.out.println("Invalid option selected!");
                     System.out.println();
-
             }
         }
     }
-
     public static void manageAnimals() {
         while (true) {
             System.out.println("Manage your animals!");
             System.out.println();
-            System.out.println("A. Create new enclosure");
-            System.out.println("B. Delete existing enclosure");
-            System.out.println("C. Back to Main menu");
+            System.out.println("A. Add animal");
+            System.out.println("B. Remove animal");
+            System.out.println("C. Check if animal has companion");
+            System.out.println("D. Back to Main menu");
             System.out.println();
             System.out.print("Select an option: ");
             String option = input.nextLine();
             System.out.println();
 
+            switch (option.trim().toUpperCase()){
+                case "A":
+                    addAnimal();
+                    break;
+                case "B":
+                    removeAnimal();
+                    break;
+                case "C":
+                    animalCompanion();
+                    break;
+                case "D":
+                    mainMenu();
+                    break;
+                default:
+                    System.out.println();
+                    System.out.println("Invalid option selected!");
+                    System.out.println();
+
+                    switch (option.trim().toUpperCase()) {
+                        case "A":
+                            System.out.print("Enter animal name: ");
+                            String name = input.nextLine();
+                            System.out.print("Enter Species of animal: ");
+                            String species = input.nextLine();
+                            System.out.print("Which enclosure should this animal be in: ");
+                            int enc = input.nextInt();
+                            //add error if never input int enclosure
+                            animals.add(new Animal(name, species));
+
+                        case "B":
+                            for (int i = 0; i < animals.size(); i++) {
+                                System.out.printf("%d. %s", i + 1, animals.get(1).getName());
+                            }
+                            System.out.print("Select the animal to remove: ");
+                            //always put nextLine() after nextInt()
+                            int opt = input.nextInt();
+                            input.nextLine();
+                            zoos.remove(opt - 1);
+                            break;
+
+                        case "C":
+                            System.out.print("Enter companion name");
 
 
 
 
+                    }
             }
-
-    }  public static void manageEnclosures() {
+        }
+    }
+    public static void manageEnclosures() {
         while (true) {
+            System.out.println("Manage your enclosures!");
             System.out.println();
             System.out.println("A. Create new enclosure");
             System.out.println("B. Delete existing enclosure");
@@ -78,7 +125,7 @@ public class ZooManagement {
             String option = input.nextLine();
             System.out.println();
 
-            switch(option.trim().toUpperCase()) {
+            switch (option.trim().toUpperCase()) {
                 case "A":
                     createNewEnclosure();
                     break;
@@ -95,9 +142,38 @@ public class ZooManagement {
                     System.out.println();
                     System.out.println("Invalid option selected!");
                     System.out.println();
+
+                    switch (option.trim().toUpperCase()) {
+
+                        case "A":
+                            System.out.print("Enter name of the enclosure: ");
+                            String name = input.nextLine();
+                            System.out.print("Enter description: ");
+                            String desc = input.nextLine();
+                            enclosures.add(new Enclosure(name, desc));
+                            break;
+
+                        case "B":
+                            for (int i = 0; i < enclosures.size(); i++) {
+                                System.out.printf("%d. %s", i + 1, zoos.get(1).getName());
+                            }
+                            System.out.print("Select enclosure to remove: ");
+                            int opt = input.nextInt();
+                            input.nextLine();
+                            enclosures.remove(opt - 1);
+                            break;
+
+                        case "Q":
+                            return;
+
+                        default:
+                            System.out.println();
+                            System.out.println("Invalid option selected!");
+                            System.out.println();
+                    }
+            }
         }
     }
-
 
     public static void manageZoos() {
 
@@ -113,14 +189,17 @@ public class ZooManagement {
             System.out.println("Select an option: ");
             String option = input.nextLine();
 
-            switch(option.trim().toUpperCase()) {
+            switch (option.trim().toUpperCase()) {
                 case "A":
                     System.out.print("Enter name of the zoo: ");
                     String name = input.nextLine();
                     System.out.print("Enter description: ");
                     String desc = input.nextLine();
                     zoos.add(new Zoo(name, desc));
+                    System.out.println("Zoo created!");
+                    System.out.println();
                     break;
+
                 case "B":
                     for (int i = 0; i < zoos.size(); i++) {
                         System.out.printf("%d. %s", i + 1, zoos.get(1).getName());
@@ -138,6 +217,9 @@ public class ZooManagement {
                     System.out.println("Invalid option selected!");
                     System.out.println();
             }
+        }
+    }
+}
         }
     }
 }
