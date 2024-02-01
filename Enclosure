@@ -4,28 +4,31 @@ public class Enclosure {
     private double area;
     private ArrayList<Animal> animals;
 
+
     public Enclosure (String name, double area, ArrayList<Animal> animals ) {
         this.name = name;
         this.area = area;
         this.animals = animals;
     }
 
-    public double countAnimals() {
+    public int countAnimals() {
         return 0;
     }
-    public double getUtilisedArea() {
+    public int getUtilisedArea() {
         return 0;
     }
     public double getUtilisedAreaPercentage() {
         return 0;
     }
-    public double countSpecies(String type) {
+    public int countSpecies(int type) {
         return 0;
-    }
+    } //return number of unique species in current enclosure
     public boolean addAnimal(Animal animal) {
         return false;
     }
     public double createNewEnclosure() {
         return 0;
     }
+
+
 }
