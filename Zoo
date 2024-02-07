@@ -2,21 +2,30 @@ import java.util.ArrayList;
 public class Zoo {
     private String name;
     private String description;
-    private ArrayList<Enclosure> enclosures;
+    private ArrayList< Enclosure > enclosures;
 
-    public Zoo (String name, String description) {
+    public Zoo (String name, String description, ArrayList<Enclosure> enclosures ) {
         this.name = name;
         this.description = description;
+        this.enclosures = enclosures;
     }
-
     public double getTotalEnclosureArea() {
-        return 0;
+        double total  = 0;
+        // list.size gets the length of the list
+        //
+        for(int i = 0; i < enclosures.size(); i++){
+            Enclosure e = enclosures.get(i);
+            total += e.getUtilisedArea();
+        }
+        return total;
     }
     public int countEnclosures() {
-        return 0;
+        // count how many enclosures in the arraylist
+        // and return how many there is
+        return enclosures.size();
     }
     public String getName() {
         return name;
     }
-
 }
+ 
