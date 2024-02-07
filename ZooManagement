@@ -4,8 +4,6 @@ import java.util.ArrayList;
 public class ZooManagement {
     private static Scanner input = new Scanner(System.in);
     private static ArrayList < Zoo > zoos = new ArrayList <> ();
-    private static ArrayList < Enclosure > enclosures = new ArrayList <> ();
-    private static ArrayList< Animal > animals = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -57,7 +55,7 @@ public class ZooManagement {
             System.out.println("A. Add animal");
             System.out.println("B. Remove animal");
             System.out.println("C. Check if animal has companion");
-            System.out.println("D. Back to Main menu");
+            System.out.println("X. Back to Main menu");
             System.out.println();
             System.out.print("Select an option: ");
             String option = input.nextLine();
@@ -73,9 +71,8 @@ public class ZooManagement {
                 case "C":
                     animalCompanion();
                     break;
-                case "D":
-                    mainMenu();
-                    break;
+                case "X":
+                    return;
                 default:
                     System.out.println();
                     System.out.println("Invalid option selected!");
@@ -87,10 +84,11 @@ public class ZooManagement {
                             String name = input.nextLine();
                             System.out.print("Enter Species of animal: ");
                             String species = input.nextLine();
+
                             System.out.print("Which enclosure should this animal be in: ");
                             int enc = input.nextInt();
                             //add error if never input int enclosure
-                            animals.add(new Animal(name, species));
+                            animals.add(new Animal(species,enclosure,areaNeeded));
 
                         case "B":
                             for (int i = 0; i < animals.size(); i++) {
@@ -104,7 +102,11 @@ public class ZooManagement {
                             break;
 
                         case "C":
-                            System.out.print("Enter companion name");
+                            System.out.print("Select an animal: ");
+                            //show arraylist of animals available
+                            //scanner to select input
+                            // For loop to scan through the arraylist of animals
+                            // use boolean false if no same animal, boolean true if there is another of the same species
 
 
 
@@ -133,11 +135,10 @@ public class ZooManagement {
                     deleteExistingEnclosure();
                     break;
                 //back to main menu
-                case "C":
-                    backToMainMenu();
-                    break;
-                case "Q":
+                case "X":
                     return;
+
+                    break;
                 default:
                     System.out.println();
                     System.out.println("Invalid option selected!");
@@ -150,26 +151,30 @@ public class ZooManagement {
                             String name = input.nextLine();
                             System.out.print("Enter description: ");
                             String desc = input.nextLine();
-                            enclosures.add(new Enclosure(name, desc));
+                            enclosures.add(new Enclosure(name, 0, new ArrayList<>()));
                             break;
 
                         case "B":
                             for (int i = 0; i < enclosures.size(); i++) {
-                                System.out.printf("%d. %s", i + 1, zoos.get(1).getName());
+                                System.out.printf("%d. %s", i + 1, enclosures.get(i).getName());
                             }
                             System.out.print("Select enclosure to remove: ");
                             int opt = input.nextInt();
                             input.nextLine();
-                            enclosures.remove(opt - 1);
+
+                            if ( opt >= 1 && opt <= enclosures.size()) {
+                                enclosures.remove(opt - 1);
+                            }
                             break;
 
-                        case "Q":
-                            return;
+                            case "Q":
+                                return;
+                            break;
 
-                        default:
-                            System.out.println();
-                            System.out.println("Invalid option selected!");
-                            System.out.println();
+                            default:
+                                System.out.println();
+                                System.out.println("Invalid option selected!");
+                                System.out.println();
                     }
             }
         }
@@ -195,21 +200,47 @@ public class ZooManagement {
                     String name = input.nextLine();
                     System.out.print("Enter description: ");
                     String desc = input.nextLine();
-                    zoos.add(new Zoo(name, desc));
+                    ArrayList< Enclosure > enclosures = new ArrayList<>();
+                    zoos.add(new Zoo(name, desc, enclosures));
                     System.out.println("Zoo created!");
                     System.out.println();
                     break;
 
                 case "B":
+                    if(zoos.isEmpty()){
+                        System.out.print("No zoos to remove.");
+                    }else {
                     for (int i = 0; i < zoos.size(); i++) {
-                        System.out.printf("%d. %s", i + 1, zoos.get(1).getName());
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
                     }
                     System.out.print("Select the zoo to remove: ");
+                    }
                     //always put nextLine() after nextInt()
                     int opt = input.nextInt();
                     input.nextLine();
                     zoos.remove(opt - 1);
                     break;
+                case "C":
+                    //show which zoo
+                    //where did i store my zoos
+                    //loop through arraylist to get the number of zoos,
+                    System.out.println("Choose which zoo: ");
+                    for(int i = 0; i < zoos.size(); i++) {
+                        System.out.println("Choose which zoo: ");
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                    }
+                     int in = input.nextInt();
+                    // call the function in zoo class
+                    //printf output
+                    System.out.println("The total area of the current enclosure is: " + zoos.get(in).getTotalEnclosureArea());
+                    break;
+
+                case "D":
+                    //for loop through the zoo and get the amount of enclosures that r in the zoo
+                    for(int i = 0; i < zoos.size(); i++) {
+                        zoos.get(i);
+                    }
+                    System.out.println("The total amount of enclosures is : " + );
                 case "Q":
                     return;
                 default:
@@ -217,9 +248,6 @@ public class ZooManagement {
                     System.out.println("Invalid option selected!");
                     System.out.println();
             }
-        }
-    }
-}
         }
     }
 }
