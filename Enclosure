@@ -7,19 +7,25 @@ public class Enclosure {
 
     public Enclosure (String name, double area, ArrayList<Animal> animals ) {
         this.name = name;
-        this.area = area;
-        this.animals = animals;
+        this.area = 0;
+        this.animals = new ArrayList<>();
+    }
+    public String getName() {
+        return name;
     }
 
     public int countAnimals() {
         return 0;
     }
-    public int getUtilisedArea() {
-        return 0;
+    public double getUtilisedArea() {
+        return area;
     }
     public double getUtilisedAreaPercentage() {
         return 0;
     }
+    //loop through all animals, whenever u encounter a unique species, add into hashmap
+    //increment count by 1 when unique
+
     public int countSpecies(int type) {
         return 0;
     } //return number of unique species in current enclosure
