@@ -2,52 +2,134 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ZooManagement {
-    private static Scanner input = new Scanner(System.in);
-    private static ArrayList < Zoo > zoos = new ArrayList <> ();
-
+    private final static Scanner input = new Scanner(System.in);
+    private final static ArrayList<Zoo> zoos = new ArrayList<>();
+    private final static ArrayList<Enclosure> enclosures = new ArrayList<>();
 
     public static void main(String[] args) {
 
-        System.out.println("Welcome to the zoo program!");
-        System.out.println("===========================");
+        System.out.println("Welcome to the Zoo Management program.");
+        System.out.println("=======================================");
 
-        //While(true) allows ur program to run forever
         while (true) {
-            //Prompt user input
-            System.out.println();
-            System.out.println("1. Manage Animals");
-            System.out.println("2. Manage Enclosures");
-            System.out.println("3. Manage Zoos");
-            System.out.println("Q. Quit");
-            System.out.println();
-            System.out.print("Select an option: ");
-            String option = input.nextLine();
-            System.out.println();
 
-            // Check all the options.
-            // Trim get rids of all the spaces
-            // Use switch and case for error handling
-            // Whenever I collect options i always use string because its a lot easier to manage strings and can accept alphanumerical things
-            // toUpperCase converts lower case to upper
+            // prompt for user input
+            System.out.println();
+            System.out.println("What would you like to manage?");
+            System.out.println();
+            System.out.println("1) Manage Zoos");
+            System.out.println("2) Manage Enclosures");
+            System.out.println("3) Manage Animals");
+            System.out.println("Q) Quit");
+            System.out.println();
+            System.out.println("Please select an option: ");
+            String option = input.nextLine();
+
+            // check all options
             switch (option.trim().toUpperCase()) {
                 case "1":
-                    manageAnimals();
+                    manageZoos();
                     break;
                 case "2":
                     manageEnclosures();
                     break;
                 case "3":
-                    manageZoos();
+                    manageAnimals();
                     break;
                 case "Q":
                     return;
                 default:
                     System.out.println();
-                    System.out.println("Invalid option selected!");
+                    System.out.println("Invalid option selected. Please try again.");
                     System.out.println();
             }
         }
     }
+
+
+    public static void manageZoos() {
+
+        while(true) {
+
+            System.out.println();
+            System.out.println("Manage Zoos");
+            System.out.println("-------------------------");
+            System.out.println("a) Create new zoos");
+            System.out.println("b) Delete existing zoos");
+            System.out.println("c) Calculate total area of all enclosures in the zoo");
+            System.out.println("d) Count total number of enclosures");
+            System.out.println("Q) Back to main menu");
+            System.out.println();
+            System.out.println("Please select an option: ");
+            String option = input.nextLine();
+            System.out.println();
+
+            switch(option.trim().toUpperCase()) {
+                case "A":
+                    System.out.print("Enter name of the zoo: ");
+                    String name = input.nextLine();
+                    System.out.print("Enter description of the zoo: ");
+                    String description = input.nextLine();
+                    zoos.add(new Zoo(name, description, enclosures));
+                    System.out.println();
+                    System.out.println("Zoo created!");
+                    break;
+                case "B":
+                    // Terminates the loop after printing the warning message
+                    if(zoos.isEmpty()){
+                        System.out.println("WARNING: No Zoos.");
+                        break;
+                    }
+                    System.out.print("Select the zoo to remove: ");
+                    System.out.println();
+
+                    //Display list of zoos
+                    // This loop iterates over each Zoo object (zoo) in the zoos ArrayList and prints the string representation of each Zoo object by calling its toString() method. This way, you'll print the details of each Zoo object separately in each iteration.
+                    for(Zoo zoo : zoos){
+                        System.out.println(zoo.toString());
+                    }
+
+                    //Check if input is not an integer
+                    while(!input.hasNextInt()){
+                        System.out.println("Invalid input. Please enter a number");
+                        input.nextLine(); //Consume the invalid input if you don't put input.nextLine, code will have error mismatch
+                    }
+
+                    int opt = input.nextInt();
+                    input.nextLine();
+                    System.out.println();
+
+                    // Check if the entered number is within the valid range
+                    if(opt < 1 || opt > zoos.size()) {
+                        System.out.println("Invalid option. Please enter a valid zoo Number.");
+                        //Consume the invalid input if you don't put input.nextLine, code will have error mismatch
+                        //input.nextLine allows you to type your input again
+
+                    } else {
+                        zoos.remove(opt - 1);
+                        System.out.println("Zoo Deleted.");
+                    }
+                    break;
+                case "C":
+
+                    break;
+                case "D":
+                    for(Enclosure enclosure : enclosures) {
+                        System.out.println(enclosure.toString());
+                        System.out.println("Press any key to go back to \"Manage enclosure\" ");
+                        input.nextLine();
+                    }
+                    break;
+                case "Q":
+                    return;
+                default:
+                    System.out.println();
+                    System.out.println("Invalid input. Please try again.");
+                    System.out.println();
+
+        }
+    }
+}
     public static void manageAnimals() {
         while (true) {
             System.out.println("Manage your animals!");
@@ -107,9 +189,6 @@ public class ZooManagement {
                             //scanner to select input
                             // For loop to scan through the arraylist of animals
                             // use boolean false if no same animal, boolean true if there is another of the same species
-
-
-
 
                     }
             }
@@ -179,75 +258,3 @@ public class ZooManagement {
             }
         }
     }
-
-    public static void manageZoos() {
-
-        while (true) {
-
-            System.out.println();
-            System.out.println("a. Create new zoo");
-            System.out.println("b. Delete existing zoo");
-            System.out.println("c. Calculate total area of enclosures");
-            System.out.println("d. Count total enclosures");
-            System.out.println("Q. Back to main menu");
-            System.out.println();
-            System.out.println("Select an option: ");
-            String option = input.nextLine();
-
-            switch (option.trim().toUpperCase()) {
-                case "A":
-                    System.out.print("Enter name of the zoo: ");
-                    String name = input.nextLine();
-                    System.out.print("Enter description: ");
-                    String desc = input.nextLine();
-                    ArrayList< Enclosure > enclosures = new ArrayList<>();
-                    zoos.add(new Zoo(name, desc, enclosures));
-                    System.out.println("Zoo created!");
-                    System.out.println();
-                    break;
-
-                case "B":
-                    if(zoos.isEmpty()){
-                        System.out.print("No zoos to remove.");
-                    }else {
-                    for (int i = 0; i < zoos.size(); i++) {
-                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
-                    }
-                    System.out.print("Select the zoo to remove: ");
-                    }
-                    //always put nextLine() after nextInt()
-                    int opt = input.nextInt();
-                    input.nextLine();
-                    zoos.remove(opt - 1);
-                    break;
-                case "C":
-                    //show which zoo
-                    //where did i store my zoos
-                    //loop through arraylist to get the number of zoos,
-                    System.out.println("Choose which zoo: ");
-                    for(int i = 0; i < zoos.size(); i++) {
-                        System.out.println("Choose which zoo: ");
-                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
-                    }
-                     int in = input.nextInt();
-                    // call the function in zoo class
-                    //printf output
-                    System.out.println("The total area of the current enclosure is: " + zoos.get(in).getTotalEnclosureArea());
-                    break;
-
-                case "D":
-                    //for loop through the zoo and get the amount of enclosures that r in the zoo
-                    for(int i = 0; i < zoos.size(); i++) {
-                        zoos.get(i);
-                    }
-                    System.out.println("The total amount of enclosures is : " + );
-                case "Q":
-                    return;
-                default:
-                    System.out.println();
-                    System.out.println("Invalid option selected!");
-                    System.out.println();
-            }
-        }
-    }
-}
