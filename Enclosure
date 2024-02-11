@@ -1,40 +1,80 @@
 import java.util.ArrayList;
 public class Enclosure {
+    // Field Descriptors
+
     private String name;
-    private double area;
+    private int area;
     private ArrayList<Animal> animals;
 
-
-    public Enclosure (String name, double area, ArrayList<Animal> animals ) {
+    // constructor
+    public Enclosure(String name, int area, ArrayList<Animal> animals) {
         this.name = name;
-        this.area = 0;
-        this.animals = new ArrayList<>();
+        this.area = area;
+        this.animals = animals;
     }
+
+    // method descriptors
+    public int countAnimals() {
+        return animals.size();
+    }
+
+    public int getUtilisedArea() {
+        int totalUtilisedArea = 0;
+        for (Animal animal : animals) {
+            totalUtilisedArea += animal.getAreaNeeded();
+        }
+        return totalUtilisedArea;
+    }
+
+    public double getUtilisedAreaPercentage() {
+        double areaUsed = getUtilisedArea();
+        double percentage = areaUsed / area;
+        return percentage;
+    }
+
+    public int countSpecies(String type) {
+        int countSpecies = 0;
+        for (Animal animal : animals) {
+            if (animal.getSpecies().equals(type)) {
+                countSpecies++;
+            }
+        }
+        return countSpecies;
+    }
+
+    public boolean addAnimal(Animal animal) {
+        if ((area - getUtilisedArea()) >= animal.getAreaNeeded()) {
+            animals.add(animal);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // getter and setter for name
     public String getName() {
         return name;
     }
 
-    public int countAnimals() {
-        return 0;
+    public void setName(String name) {
+        this.name = name;
     }
-    public double getUtilisedArea() {
+
+    // getter and setter for area
+    public int getArea() {
         return area;
     }
-    public double getUtilisedAreaPercentage() {
-        return 0;
-    }
-    //loop through all animals, whenever u encounter a unique species, add into hashmap
-    //increment count by 1 when unique
 
-    public int countSpecies(int type) {
-        return 0;
-    } //return number of unique species in current enclosure
-    public boolean addAnimal(Animal animal) {
-        return false;
-    }
-    public double createNewEnclosure() {
-        return 0;
+    public void setArea(int area) {
+        this.area = area;
     }
 
+    // getter and setter for animals
+    public ArrayList<Animal> getAnimals() {
+        return animals;
+    }
 
+    public void setAnimals(ArrayList<Animal> animals) {
+        this.animals = animals;
+    }
 }
