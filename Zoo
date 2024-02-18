@@ -4,21 +4,13 @@ public class Zoo {
     private String name;
     private String description;
     private ArrayList<Enclosure> enclosures;
-    private int zooNumber; //Store numeric identifiers for the zoos
-
 
     // constructor
     public Zoo(String name, String description, ArrayList<Enclosure> enclosures){
         this.name = name;
         this.description = description;
         this.enclosures = enclosures;
-        this.zooNumber = zooNumber++;
     }
-    //idk how to add numbering when listing the removal of zoo
-    @Override
-    public String toString() {
-        return zooNumber++ + name + " ";
-    } //With this overridden toString() method, when you call System.out.println(zoo) within the loop, it will print the name and description of each Zoo object instead of the default representation.
 
     // method descriptors
     public int getTotalEnclosureArea() {
