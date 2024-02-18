@@ -1,10 +1,12 @@
+import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ZooManagement {
+
     private final static Scanner input = new Scanner(System.in);
     private final static ArrayList<Zoo> zoos = new ArrayList<>();
-    private final static ArrayList<Enclosure> enclosures = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -20,7 +22,7 @@ public class ZooManagement {
             System.out.println("1) Manage Zoos");
             System.out.println("2) Manage Enclosures");
             System.out.println("3) Manage Animals");
-            System.out.println("Q) Quit");
+            System.out.println("Q) Quit Zoo Management");
             System.out.println();
             System.out.println("Please select an option: ");
             String option = input.nextLine();
@@ -43,13 +45,14 @@ public class ZooManagement {
                     System.out.println("Invalid option selected. Please try again.");
                     System.out.println();
             }
-        }
-    }
 
+        }
+
+    }
 
     public static void manageZoos() {
 
-        while(true) {
+        while (true) {
 
             System.out.println();
             System.out.println("Manage Zoos");
@@ -58,66 +61,266 @@ public class ZooManagement {
             System.out.println("b) Delete existing zoos");
             System.out.println("c) Calculate total area of all enclosures in the zoo");
             System.out.println("d) Count total number of enclosures");
-            System.out.println("Q) Back to main menu");
+            System.out.println("Q) Back to Main Menu");
             System.out.println();
             System.out.println("Please select an option: ");
             String option = input.nextLine();
-            System.out.println();
 
-            switch(option.trim().toUpperCase()) {
+            switch (option.trim().toUpperCase()) {
                 case "A":
                     System.out.print("Enter name of the zoo: ");
                     String name = input.nextLine();
                     System.out.print("Enter description of the zoo: ");
                     String description = input.nextLine();
-                    zoos.add(new Zoo(name, description, enclosures));
+                    zoos.add(new Zoo(name, description, new ArrayList<>()));
                     System.out.println();
-                    System.out.println("Zoo created!");
+                    System.out.println("Zoo added successfully.");
+                    System.out.println();
                     break;
                 case "B":
-                    // Terminates the loop after printing the warning message
-                    if(zoos.isEmpty()){
-                        System.out.println("WARNING: No Zoos.");
-                        break;
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
                     }
                     System.out.print("Select the zoo to remove: ");
-                    System.out.println();
-
-                    //Display list of zoos
-                    // This loop iterates over each Zoo object (zoo) in the zoos ArrayList and prints the string representation of each Zoo object by calling its toString() method. This way, you'll print the details of each Zoo object separately in each iteration.
-                    for(Zoo zoo : zoos){
-                        System.out.println(zoo.toString());
+                    // will cause error when user inputs string
+//                    int opt = input.nextInt();
+//                    input.nextLine();
+//                    zoos.remove(opt - 1);
+                    String zooName = input.nextLine();
+                    boolean isFound = false;
+//                    int count = zoos.size();
+                    for (Zoo zoo1 : zoos) {
+                        if (zoo1.getName().equals(zooName)) {
+                            zoos.remove(zoo1);
+                            isFound = true;
+                            System.out.println("Zoo removed successfully.");
+                            break; //exit loop after zoo removed
+                        }
                     }
-
-                    //Check if input is not an integer
-                    while(!input.hasNextInt()){
-                        System.out.println("Invalid input. Please enter a number");
-                        input.nextLine(); //Consume the invalid input if you don't put input.nextLine, code will have error mismatch
-                    }
-
-                    int opt = input.nextInt();
-                    input.nextLine();
-                    System.out.println();
-
-                    // Check if the entered number is within the valid range
-                    if(opt < 1 || opt > zoos.size()) {
-                        System.out.println("Invalid option. Please enter a valid zoo Number.");
-                        //Consume the invalid input if you don't put input.nextLine, code will have error mismatch
-                        //input.nextLine allows you to type your input again
-
-                    } else {
-                        zoos.remove(opt - 1);
-                        System.out.println("Zoo Deleted.");
+                    //if (count <= 0) {
+                    if (!isFound) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
+                        System.out.println();
                     }
                     break;
                 case "C":
-
+                    // kyungjin one
+//                    for (int i = 0; i < zoos.size(); i++) {
+//                        int num = Integer.valueOf(String.valueOf(zoos.get(i)));
+//                        int te = 0;
+//                        te += num;
+//                        System.out.println("Total area is " + te);
+//                    }
+//                    System.out.println();
+//                    System.out.println();
+                    int totalEnclosureArea = 0;
+                    for (Zoo zoo1 : zoos) {
+                        totalEnclosureArea += zoo1.getTotalEnclosureArea();
+                    }
+                    System.out.println("The total area of all enclosures in the selected zoo is " + totalEnclosureArea);
                     break;
                 case "D":
-                    for(Enclosure enclosure : enclosures) {
-                        System.out.println(enclosure.toString());
-                        System.out.println("Press any key to go back to \"Manage enclosure\" ");
-                        input.nextLine();
+                    int countEnclosures = 0;
+                    for (Zoo zoo1 : zoos) {
+                        countEnclosures += zoo1.countEnclosures();
+                    }
+                    System.out.println("The total number of enclosures in the selected zoo is " + countEnclosures);
+                    break;
+                case "Q":
+                    return;
+                default:
+                    System.out.println();
+                    System.out.println("Invalid input. Please try again.");
+                    System.out.println();
+
+            }
+
+        }
+
+    }
+
+    public static void manageEnclosures() {
+        while (true) {
+            System.out.println();
+            System.out.println("Manage Enclosures");
+            System.out.println("-----------------");
+            System.out.println("a) Add an Enclosure to a Zoo");
+            System.out.println("b) Delete an existing Enclosure from a Zoo");
+            System.out.println("c) Get the utilised area in a given Enclosure");
+            System.out.println("d) Get the percentage of utilised area in a given Enclosure");
+            System.out.println("e) Count the number of species in an enclosure");
+            System.out.println("Q) Back to Main Menu");
+            System.out.println("Please select an option: ");
+            String option = input.nextLine();
+
+            // check all options
+            switch (option.trim().toUpperCase()) {
+                case "A":
+                    System.out.println("Add an enclosure to a zoo");
+                    System.out.println("-------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    int count = zoos.size();
+                    System.out.println("Choose Zoo to add an enclosure to (enter zoo name): ");
+                    String zooName = input.nextLine();
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName)) {
+                            System.out.println("-----Enclosure Details-----");
+                            System.out.println("Enclosure Name: ");
+                            String enclosureName = input.nextLine();
+                            try {
+                                System.out.println("Area of Enclosure: ");
+                                int enclosureArea = input.nextInt();
+
+                                Enclosure newEnclosure = new Enclosure(enclosureName, enclosureArea, new ArrayList<>());
+                                selectedZoo.getEnclosures().add(newEnclosure); }
+                             catch (InputMismatchException e){
+
+                                }
+
+                            System.out.println("Enclosure " + enclosureName + " added to Zoo " + zooName + " successfully.");
+                        } else {
+                            count--;
+                        }
+                    }
+                    if (count <= 0) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
+                    }
+                    break;
+                case "B":
+                    System.out.println("Delete an existing Enclosure from a Zoo");
+                    System.out.println("------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    int count1 = zoos.size();
+                    System.out.println("Enter Zoo name to delete from: ");
+                    String zooName1 = input.nextLine();
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName1)) {
+                            System.out.println("Enter Enclosure name to remove: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    selectedZoo.getEnclosures().remove(enclosure);
+                                    System.out.println("Enclosure " + enclosureName + " deleted from Zoo " + zooName1 + " successfully.");
+                                    break;
+                                } else {
+                                    System.out.println("Invalid Enclosure name entered. Please try again.");
+                                }
+                            }
+                        } else {
+                            count1--;
+                        }
+                        if (count1 <= 0) {
+                            System.out.println("Invalid Zoo name entered. Please try again.");
+                        }
+                        break;
+                    }
+                case "C":
+                    System.out.println("Get utilised area in a given enclosure");
+                    System.out.println("--------------------------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    System.out.println("Enter Zoo name which enclosure belongs to: ");
+                    String zooName2 = input.nextLine();
+                    int count2 = zoos.size();
+                    int count3 = 0;
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName2)) {
+                            System.out.println("Enter Enclosure Name to find area of: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    System.out.println("Utilised area in enclosure " + enclosureName + " in Zoo " + zooName2 + " is " + enclosure.getUtilisedArea());
+                                    break;
+                                } else {
+                                    count3++;
+                                }
+                            }
+                            if (count3 >= selectedZoo.getEnclosures().size()) {
+                                System.out.println("Invalid enclosure name entered. Please try again.");
+                            }
+                        } else {
+                            count2--;
+                        }
+                    }
+                    if (count2 <= 0) {
+                        System.out.println("Invalid zoo name entered. Please try again.");
+                    }
+                    break;
+                case "D":
+                    System.out.println("Get percentage of utilised area in a given Enclosure");
+                    System.out.println("-----------------------------------------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    System.out.println("Enter Zoo name that Enclosure belongs to: ");
+                    String zooName3 = input.nextLine();
+                    int count4 = zoos.size();
+                    int count5 = 0;
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName3)) {
+                            System.out.println("Enter Enclosure name to get % area of: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    System.out.printf("Percentage of utilised area in Enclosure %s in Zoo %s is %.2f", enclosureName, zooName3, enclosure.getUtilisedAreaPercentage());
+                                    break;
+                                } else {
+                                    count5++;
+                                }
+                            }
+                            if (count5 >= selectedZoo.getEnclosures().size()) {
+                                System.out.println("Invalid Enclosure name entered. Please try again.");
+                            }
+                        } else {
+                            count4--;
+                        }
+                    }
+                    if (count4 <= 0) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
+                    }
+                    break;
+                case "E":
+                    System.out.println("Count number of species in an enclosure");
+                    System.out.println("---------------------------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    System.out.println("Enter Zoo name that enclosure belongs to: ");
+                    String zooName4 = input.nextLine();
+                    int count6 = zoos.size();
+                    int count7 = 0;
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName4)) {
+                            System.out.println("Enter Enclosure name to find number of species inside: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    System.out.println("The number of species in " + enclosureName + " in Zoo " + zooName4 + " is " + enclosure.countAnimals());
+                                    break;
+                                } else {
+                                    count7++;
+                                }
+                            }
+                            if (count7 >= selectedZoo.getEnclosures().size()) {
+                                System.out.println("Invalid Enclosure name entered. Please try again.");
+                            }
+                        } else {
+                            count6--;
+                        }
+                    }
+                    if (count6 <= 0) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
                     }
                     break;
                 case "Q":
@@ -127,134 +330,167 @@ public class ZooManagement {
                     System.out.println("Invalid input. Please try again.");
                     System.out.println();
 
+            }
+
         }
     }
-}
+
     public static void manageAnimals() {
         while (true) {
-            System.out.println("Manage your animals!");
             System.out.println();
-            System.out.println("A. Add animal");
-            System.out.println("B. Remove animal");
-            System.out.println("C. Check if animal has companion");
-            System.out.println("X. Back to Main menu");
+            System.out.println("Manage Animals");
+            System.out.println("---------------");
+            System.out.println("a) Add Animals to an Enclosure");
+            System.out.println("b) Remove Animals from an Enclosure");
+            System.out.println("c) Check if an Animal has a companion in its Enclosure");
+            System.out.println("Q) Back to Main Menu");
             System.out.println();
-            System.out.print("Select an option: ");
+            System.out.println("Please select an option: ");
             String option = input.nextLine();
-            System.out.println();
-
-            switch (option.trim().toUpperCase()){
-                case "A":
-                    addAnimal();
-                    break;
-                case "B":
-                    removeAnimal();
-                    break;
-                case "C":
-                    animalCompanion();
-                    break;
-                case "X":
-                    return;
-                default:
-                    System.out.println();
-                    System.out.println("Invalid option selected!");
-                    System.out.println();
-
-                    switch (option.trim().toUpperCase()) {
-                        case "A":
-                            System.out.print("Enter animal name: ");
-                            String name = input.nextLine();
-                            System.out.print("Enter Species of animal: ");
-                            String species = input.nextLine();
-
-                            System.out.print("Which enclosure should this animal be in: ");
-                            int enc = input.nextInt();
-                            //add error if never input int enclosure
-                            animals.add(new Animal(species,enclosure,areaNeeded));
-
-                        case "B":
-                            for (int i = 0; i < animals.size(); i++) {
-                                System.out.printf("%d. %s", i + 1, animals.get(1).getName());
-                            }
-                            System.out.print("Select the animal to remove: ");
-                            //always put nextLine() after nextInt()
-                            int opt = input.nextInt();
-                            input.nextLine();
-                            zoos.remove(opt - 1);
-                            break;
-
-                        case "C":
-                            System.out.print("Select an animal: ");
-                            //show arraylist of animals available
-                            //scanner to select input
-                            // For loop to scan through the arraylist of animals
-                            // use boolean false if no same animal, boolean true if there is another of the same species
-
-                    }
-            }
-        }
-    }
-    public static void manageEnclosures() {
-        while (true) {
-            System.out.println("Manage your enclosures!");
-            System.out.println();
-            System.out.println("A. Create new enclosure");
-            System.out.println("B. Delete existing enclosure");
-            System.out.println("C. Back to main menu");
-            System.out.println();
-            System.out.println("Select an option: ");
-            String option = input.nextLine();
-            System.out.println();
 
             switch (option.trim().toUpperCase()) {
                 case "A":
-                    createNewEnclosure();
+                    System.out.println("Add Animals to an Enclosure");
+                    System.out.println("---------------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    System.out.println("Enter Zoo name that Enclosure belongs to: ");
+                    String zooName5 = input.nextLine();
+                    int count8 = zoos.size();
+                    int count9 = 0;
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName5)) {
+                            System.out.println("Enter Enclosure name to add Animal to: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    System.out.println("Animal Details:");
+                                    System.out.println("Enter Animal Species to add to this enclosure: ");
+                                    String species = input.nextLine();
+                                    System.out.println("Enter Area that animal requires: ");
+                                    int areaNeeded = input.nextInt();
+                                    Animal newAnimal = new Animal(species, enclosure, areaNeeded);
+                                    if (enclosure.addAnimal(newAnimal)) {
+                                        System.out.printf("%s added successfully to Enclosure %s from Zoo %s", species, enclosureName, zooName5);
+                                    } else {
+                                        System.out.println("Not enough space in this enclosure to add animal.");
+                                    }
+                                    break;
+                                } else {
+                                    count9++;
+                                }
+                            }
+                            if (count9 >= selectedZoo.getEnclosures().size()) {
+                                System.out.println("Invalid Enclosure name entered. Please try again.");
+                            }
+                        } else {
+                            count8--;
+                        }
+                    }
+                    if (count8 <= 0) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
+                    }
                     break;
                 case "B":
-                    deleteExistingEnclosure();
+                    System.out.println("Remove Animals from an Enclosure");
+                    System.out.println("--------------------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    System.out.println("Enter Zoo name that Enclosure belongs to: ");
+                    String zooName6 = input.nextLine();
+                    int count10 = zoos.size();
+                    int count11 = 0;
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName6)) {
+                            System.out.println("Enter Enclosure name to remove Animal from: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    System.out.println("Enter animal species to remove: ");
+                                    String species = input.nextLine();
+                                    Iterator<Animal> animalIterator = enclosure.getAnimals().iterator();
+                                    while (animalIterator.hasNext()) {
+                                        Animal animal = animalIterator.next();
+                                        if (animal.getSpecies().equals(species)) {
+                                            animalIterator.remove();
+                                            System.out.printf("Animal \"%s\" removed from Enclosure \"%s\" from Zoo \"%s\" successfully.", species, enclosureName, zooName6);
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                } else {
+                                    count11++;
+                                }
+                            }
+                            if (count11 >= selectedZoo.getEnclosures().size()) {
+                                System.out.println("Invalid Enclosure name entered. Please try again.");
+                            }
+                        } else {
+                            count10--;
+                        }
+                    }
+                    if (count10 <= 0) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
+                    }
                     break;
-                //back to main menu
-                case "X":
+                case "C":
+                    System.out.println("Check if an animal has a companion in its enclosure");
+                    System.out.println("---------------------------------------------------");
+                    for (int i = 0; i < zoos.size(); i++) {
+                        System.out.printf("%d. %s", i + 1, zoos.get(i).getName());
+                        System.out.println();
+                    }
+                    System.out.println("Enter Zoo name that Enclosure belongs to: ");
+                    String zooName7 = input.nextLine();
+                    int count12 = zoos.size();
+                    int count13 = 0;
+                    boolean hasCompanion = true;
+                    for (Zoo selectedZoo : zoos) {
+                        if (selectedZoo.getName().equals(zooName7)) {
+                            System.out.println("Enter Enclosure name that Animal belongs to: ");
+                            String enclosureName = input.nextLine();
+                            for (Enclosure enclosure : selectedZoo.getEnclosures()) {
+                                if (enclosure.getName().equals(enclosureName)) {
+                                    System.out.println("Enter Animal's Species: ");
+                                    String species = input.nextLine();
+                                    for (Animal animal : enclosure.getAnimals()) {
+                                        if (animal.getSpecies().equals(species) && animal.hasCompanion()) {
+                                            System.out.printf("Animal \"%s\" has a companion in Enclosure %s in Zoo %s.", species, enclosureName, zooName7);
+                                            hasCompanion = true;
+                                            break;
+                                        } else {
+                                            hasCompanion = false;
+                                        }
+                                    }
+                                    if (hasCompanion == false) {
+                                        System.out.printf("Animal \"%s\" does not have a companion in Enclosure %s in Zoo %s.", species, enclosureName, zooName7);
+                                    }
+                                    break;
+                                } else {
+                                    count13++;
+                                }
+                            }
+                            if (count13 >= selectedZoo.getEnclosures().size()) {
+                                System.out.println("Invalid Enclosure name entered. Please try again.");
+                            }
+                        } else {
+                            count12--;
+                        }
+                    }
+                    if (count12 <= 0) {
+                        System.out.println("Invalid Zoo name entered. Please try again.");
+                    }
+                    break;
+                case "Q":
                     return;
-
-                    break;
                 default:
                     System.out.println();
-                    System.out.println("Invalid option selected!");
-                    System.out.println();
-
-                    switch (option.trim().toUpperCase()) {
-
-                        case "A":
-                            System.out.print("Enter name of the enclosure: ");
-                            String name = input.nextLine();
-                            System.out.print("Enter description: ");
-                            String desc = input.nextLine();
-                            enclosures.add(new Enclosure(name, 0, new ArrayList<>()));
-                            break;
-
-                        case "B":
-                            for (int i = 0; i < enclosures.size(); i++) {
-                                System.out.printf("%d. %s", i + 1, enclosures.get(i).getName());
-                            }
-                            System.out.print("Select enclosure to remove: ");
-                            int opt = input.nextInt();
-                            input.nextLine();
-
-                            if ( opt >= 1 && opt <= enclosures.size()) {
-                                enclosures.remove(opt - 1);
-                            }
-                            break;
-
-                            case "Q":
-                                return;
-                            break;
-
-                            default:
-                                System.out.println();
-                                System.out.println("Invalid option selected!");
-                                System.out.println();
-                    }
+                    System.out.println("Invalid input. Please try again.");
             }
         }
     }
+}
